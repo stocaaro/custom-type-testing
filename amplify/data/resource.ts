@@ -1,5 +1,6 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { testFcn } from '../functions/test-fcn/resource';
+import { testFcn2 } from '../functions/test-fcn2/resource';
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -15,29 +16,43 @@ const schema = a.schema({
   fcnInput: a.customType({
     filter: a.string().required()
   }),
+  fcnInput2: a.customType({
+    inner: a.customType({
+      filter: a.string().required(),
+      e1: a.enum(['a', 'b', 'c'])
+    })
+  }),
+  eRef: a.enum(['a1', 'b1']),
   Todo: a
     .model({
       content: a.string(),
     })
     .authorization((allow) => [allow.guest()]),
   fcnCall: a.query()
-    .arguments({arg1: a.ref('fcnInput'), arg2: a.customType({
-      x: a.string().required()
-    })})
+    .arguments({
+      arg1: a.ref('fcnInput'), 
+      arg2: a.customType({
+        x: a.string().required(),
+        e2: a.enum(['c', 'd'])
+      }), 
+      e3: a.ref('eRef')
+    })
     .returns(a.ref('fcnReturn'))
     .handler(a.handler.function(testFcn))
     .authorization((allow) => [allow.guest()]),
-    fcnCall2: a.query()
-    .arguments({arg1: a.ref('fcnInput'), arg2: a.customType({
-      x: a.string().required()
+  fcnCall2: a.query()
+    .arguments({arg1: a.ref('fcnInput2'), arg2: a.customType({
+      x: a.string().required(),
     })})
     .returns(a.customType({
       todoCount: a.integer().required(),
       x: a.string().required()
     }))
-    .handler(a.handler.function(testFcn))
+    .handler(a.handler.function(testFcn2))
     .authorization((allow) => [allow.guest()]),
-}).authorization((a) => [a.resource(testFcn)]);
+}).authorization((a) => [a.resource(testFcn), a.resource(testFcn2)]);
+
+console.log(schema.transform().schema); 
 
 export type Schema = ClientSchema<typeof schema>;
 

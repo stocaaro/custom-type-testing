@@ -10,10 +10,11 @@ Amplify.configure(resourceConfig, libraryOptions);
 
 const client = generateClient<Schema>();
 
-export const handler: Schema['fcnCall']['functionHandler'] = async (x) => {
-    const y = x.arguments.arg2?.e2
+export const handler: Schema['fcnCall2']['functionHandler'] = async ({arguments: {arg1, arg2}}) => {
+    const q = arg1?.inner?.e1;
     return {
+
         todoCount: (await client.models.Todo.list()).data.length,
-        x: JSON.stringify({a: x.arguments}),
+        x: JSON.stringify({arg1, arg2, q}),
     }
 }
