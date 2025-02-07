@@ -18,7 +18,7 @@ function App() {
           arg2: {x: 'asd'}
         }))} >Get Count</button>
         <button onClick={async () => console.log(await client.queries.fcnCall2({
-          arg1: {filter: "Test"},
+          arg1: {inner: {filter: "Test", e1: 'a'}},
           arg2: {x: 'asd'}
         }))} >Get Count2</button>
       </div>

@@ -9,12 +9,24 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
+  Profile: a.customType({
+    name: a.string()
+  }),
+  fcnCallasd: a.query()
+    .arguments({
+      input: a.ref("Profile")
+    }).returns(a.string()),
   fcnReturn: a.customType({
     todoCount: a.integer().required(),
     x: a.string().required()
   }),
+  cType: a.customType({
+    note: a.string()
+  }),
   fcnInput: a.customType({
-    filter: a.string().required()
+    filter: a.string().required(),
+    link: a.ref('fcnInput'),
+    todoRef: a.ref('Todo'),
   }),
   fcnInput2: a.customType({
     inner: a.customType({
@@ -26,6 +38,8 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
+      relatedTo: a.ref('cType'),
+      x: a.ref('fcnInput')
     })
     .authorization((allow) => [allow.guest()]),
   fcnCall: a.query()
