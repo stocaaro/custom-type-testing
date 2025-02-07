@@ -15,11 +15,11 @@ function App() {
         <button onClick={() => client.models.Todo.create({ content: "Test Content"})} >Create Todo</button>
         <button onClick={async () => console.log(await client.queries.fcnCall({
           arg1: {filter: "Test"},
-          arg2: {x: 'asd'}
+          arg2: {x: 'asd2'}
         }))} >Get Count</button>
         <button onClick={async () => console.log(await client.queries.fcnCall2({
           arg1: {inner: {filter: "Test", e1: 'a'}},
-          arg2: {x: 'asd'}
+          arg2: {x: 'asd1'}
         }))} >Get Count2</button>
       </div>
     </>

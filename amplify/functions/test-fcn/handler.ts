@@ -14,6 +14,6 @@ export const handler: Schema['fcnCall']['functionHandler'] = async (x) => {
     const y = x.arguments.arg2?.e2
     return {
         todoCount: (await client.models.Todo.list()).data.length,
-        x: JSON.stringify({a: x.arguments}),
+        x: JSON.stringify({a: x.arguments, b: 'asd'}),
     }
 }

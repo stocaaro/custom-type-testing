@@ -14,7 +14,7 @@ const schema = a.schema({
   }),
   fcnCallasd: a.query()
     .arguments({
-      input: a.ref("Profile")
+      arg: a.ref("Profile")
     }).returns(a.string()),
   fcnReturn: a.customType({
     todoCount: a.integer().required(),
@@ -23,39 +23,38 @@ const schema = a.schema({
   cType: a.customType({
     note: a.string()
   }),
-  fcnInput: a.customType({
+  fcnArg: a.customType({
     filter: a.string().required(),
-    link: a.ref('fcnInput'),
-    todoRef: a.ref('Todo'),
+    link: a.ref('fcnArg'),
   }),
-  fcnInput2: a.customType({
+  fcnArg2: a.customType({
     inner: a.customType({
       filter: a.string().required(),
       e1: a.enum(['a', 'b', 'c'])
     })
   }),
-  eRef: a.enum(['a1', 'b1']),
+  ERef: a.enum(['a1', 'b1']),
   Todo: a
     .model({
       content: a.string(),
       relatedTo: a.ref('cType'),
-      x: a.ref('fcnInput')
+      x: a.ref('fcnArg')
     })
     .authorization((allow) => [allow.guest()]),
   fcnCall: a.query()
     .arguments({
-      arg1: a.ref('fcnInput'), 
+      arg1: a.ref('fcnArg'), 
       arg2: a.customType({
         x: a.string().required(),
         e2: a.enum(['c', 'd'])
       }), 
-      e3: a.ref('eRef')
+      e3: a.ref('ERef')
     })
     .returns(a.ref('fcnReturn'))
     .handler(a.handler.function(testFcn))
     .authorization((allow) => [allow.guest()]),
   fcnCall2: a.query()
-    .arguments({arg1: a.ref('fcnInput2'), arg2: a.customType({
+    .arguments({arg1: a.ref('fcnArg2'), arg2: a.customType({
       x: a.string().required(),
     })})
     .returns(a.customType({
